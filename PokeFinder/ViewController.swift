@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import FirebaseDatabase
 
 class ViewController: UIViewController {
     
@@ -16,6 +17,7 @@ class ViewController: UIViewController {
     let locationManager = CLLocationManager()
     var mapHasCenteredOnce = false
     var geoFire: GeoFire!
+    var geoFireRef: FIRDatabaseReference!
     
     
     override func viewDidLoad() {
@@ -24,26 +26,48 @@ class ViewController: UIViewController {
         
         mapView.delegate = self
         mapView.userTrackingMode = MKUserTrackingMode.follow
+        
+        geoFireRef = FIRDatabase.database().reference()
+        geoFire = GeoFire(firebaseRef: geoFireRef)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         locationAuthStatus()
     }
     
-    func locationAuthStatus() {
-        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            mapView.showsUserLocation = true
-        } else {
-            locationManager.requestWhenInUseAuthorization()
-        }
+    func createSighting(forLocation location: CLLocation, withPokemon pokeId: Int) {
+        geoFire.setLocation(location, forKey: "\(pokeId)")
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    func showSightingsOnMap(location: CLLocation) {
+        let circleQuery = geoFire!.query(at: location, withRadius: 2.5)
         
-        if status == CLAuthorizationStatus.authorizedWhenInUse {
-            mapView.showsUserLocation = true
-        }
+        _ = circleQuery?.observe(GFEventType.keyEntered, with: { (key, location) in
+            
+            if let key = key, let location = location {
+                let anno = PokeAnnotation(coordinate: location.coordinate, pokemonNumber: Int(key)!)
+                self.mapView.addAnnotation(anno)
+            }
+            
+            
+        })
     }
+    
+    @IBAction func spotRandomPokemon(_ sender: UIButton) {
+        
+        let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
+        
+        let rand = arc4random_uniform(150) + 1
+        createSighting(forLocation: location, withPokemon: Int(rand))
+    }
+    
+}
+
+
+// MARK: MKMapViewDelegate
+
+extension ViewController: MKMapViewDelegate {
     
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, 2000, 2000)
@@ -71,21 +95,24 @@ class ViewController: UIViewController {
         return annotationView
     }
     
-    
-    @IBAction func spotRandomPokemon(_ sender: UIButton) {
-    }
-    
-}
-
-
-// MARK: MKMapViewDelegate
-
-extension ViewController: MKMapViewDelegate {
-    
 }
 
 
 // MARK: CLLocationManagerDelegate
 extension ViewController: CLLocationManagerDelegate {
     
+    func locationAuthStatus() {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            mapView.showsUserLocation = true
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        if status == CLAuthorizationStatus.authorizedWhenInUse {
+            mapView.showsUserLocation = true
+        }
+    }
 }
