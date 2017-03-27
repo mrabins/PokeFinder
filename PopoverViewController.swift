@@ -128,17 +128,23 @@ extension PopoverViewController: UISearchBarDelegate, UISearchResultsUpdating {
     
     func filterContentForSearchText(_ searchText: String, scope: String = "Pokemon") {
         searchActive = true
-        }
+        
+        let filteredFlatPokemon = thePokemon.flatMap { $0 }
+
+        filteredPokemon = filteredFlatPokemon.filter ({(PokeAnnotation) -> Bool in
+            let matchedPokemon = (scope == searchText)
+            return matchedPokemon
+        })
+        collectionView.reloadData()
     }
-
-
-
-func updateSearchResults(for searchController: UISearchController) {
-    let searchBar = searchController.searchBar
-    let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
-//    filterContentForSearchText(searchController.searchBar.text!, scope: scope)
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
+        filterContentForSearchText(searchController.searchBar.text!, scope: scope)
+    }
 }
-
 
 
 
