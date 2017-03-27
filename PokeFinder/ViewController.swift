@@ -57,11 +57,21 @@ class ViewController: UIViewController {
     }
     
     @IBAction func spotRandomPokemon(_ sender: UIButton) {
-        let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
-        let rand = arc4random_uniform(150) + 1
-        createSighting(forLocation: location, withPokemon: Int(rand))
+//        let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
+//        
+//        
+//        
+//        
+//        let rand = arc4random_uniform(150) + 1
+//        createSighting(forLocation: location, withPokemon: Int(rand))
         
-
+        let popoverContent = (self.storyboard?.instantiateViewController(withIdentifier: "Popover"))! as UIViewController
+        let navigation = UINavigationController(rootViewController: popoverContent)
+        navigation.modalPresentationStyle = UIModalPresentationStyle.popover
+        
+        
+        self.present(navigation, animated: true, completion: nil)
+       
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
