@@ -76,35 +76,31 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if searchActive {
+            print("Filtered poks \(filteredPokemon.count)")
+
             return filteredPokemon.count
         }
+        print("ThePokemon \(thePokemon.count)")
         return thePokemon.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CustomCollectionViewCell
-        
         if searchActive == true {
             let filteredFlatPokemon = filteredPokemon.flatMap { $0 }
-            
             for filteredItems in filteredFlatPokemon {
                 cellAttributes.pokemonNameLabel.text = filteredItems
             }
         } else {
             let flatPokemon = thePokemon.flatMap { $0 }
-            
             for items in flatPokemon {
                 cellAttributes.pokemonNameLabel.text = items
                 print("ITEMS \(items)")
-                
             }
-            
         }
         return cellAttributes
     }
-    
 }
 
 extension PopoverViewController: UISearchBarDelegate, UISearchResultsUpdating {
