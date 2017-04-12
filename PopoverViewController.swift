@@ -19,6 +19,7 @@ class PopoverViewController: UIViewController {
     var searchActive = false
     
     var filteredPokemon = [String]()
+    let pokeAnno = [PokeAnnotation]()
     
     //    var geoFire: GeoFire!
     var thePokemon = [String]()
@@ -83,11 +84,19 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
+        
+        
         cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CustomCollectionViewCell
         cellAttributes.pokemonNameLabel.text = pokemon[indexPath.row].uppercased()
-
+//        cellAttributes.pokemonImageLabel.image = UIImage(named: imageName)
+        
+        
         return cellAttributes
-    }
+
+        }
+    
     
 }
 
