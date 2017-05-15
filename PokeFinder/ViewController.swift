@@ -77,6 +77,7 @@ class ViewController: UIViewController {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         if let anno = view.annotation as? PokeAnnotation {
+                        
             var place: MKPlacemark!
             if #available(iOS 10.0, *) {
                 place = MKPlacemark(coordinate: anno.coordinate)
@@ -93,7 +94,6 @@ class ViewController: UIViewController {
         
     }
 }
-
 
 // MARK: MKMapViewDelegate
 

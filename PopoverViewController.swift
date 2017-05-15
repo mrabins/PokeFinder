@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseDatabase
+import MapKit
 
 class PopoverViewController: UIViewController {
     
@@ -19,10 +21,13 @@ class PopoverViewController: UIViewController {
     var searchActive = false
     
     var filteredPokemon = [String]()
-    let pokeAnno = [PokeAnnotation]()
+    var pokeAnno = [PokeAnnotation]()
     
     //    var geoFire: GeoFire!
     var thePokemon = [String]()
+    
+    var pokeyArray = [String]()
+    
     
     var cellAttributes = CustomCollectionViewCell()
     
@@ -38,6 +43,8 @@ class PopoverViewController: UIViewController {
         searchController.dimsBackgroundDuringPresentation = true
         definesPresentationContext = true
         searchController.searchBar.delegate = self
+
+        
         
         
     }
@@ -89,8 +96,13 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         
         cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CustomCollectionViewCell
+  
         cellAttributes.pokemonNameLabel.text = pokemon[indexPath.row].uppercased()
-//        cellAttributes.pokemonImageLabel.image = UIImage(named: imageName)
+        
+        
+        
+        
+//        cellAttributes.pokemonImageLabel.image = UIImage(named: )
         
         
         return cellAttributes
