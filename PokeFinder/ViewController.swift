@@ -18,6 +18,8 @@ class ViewController: UIViewController {
     var mapHasCenteredOnce = false
     var geoFire: GeoFire!
     var geoFireRef: FIRDatabaseReference!
+    var pokeAnno: [PokeAnnotation] = []
+
     
     
     override func viewDidLoad() {

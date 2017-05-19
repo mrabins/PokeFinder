@@ -15,19 +15,18 @@ class PopoverViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
+
     
     let searchController = UISearchController(searchResultsController: nil)
     
     var searchActive = false
     
-    var filteredPokemon = [String]()
-    var pokeAnno = [PokeAnnotation]()
+    var filteredPokemon = [Pokemon]()
+    var pokemon = [Pokemon]()
+
+    
     
     //    var geoFire: GeoFire!
-    var thePokemon = [String]()
-    
-    var pokeyArray = [String]()
-    
     
     var cellAttributes = CustomCollectionViewCell()
     
@@ -43,9 +42,8 @@ class PopoverViewController: UIViewController {
         searchController.dimsBackgroundDuringPresentation = true
         definesPresentationContext = true
         searchController.searchBar.delegate = self
-
         
-        
+        loadPokemonList()
         
     }
     
@@ -69,6 +67,12 @@ class PopoverViewController: UIViewController {
      }
      */
     
+    func loadPokemonList() {
+        for i in 1..<152 {
+            let poke = Pokemon(number: i)
+            pokemon.append(poke)
+        }
+    }
 }
 
 
@@ -91,18 +95,21 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
-        
-        
         cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CustomCollectionViewCell
+        
+        let poke: Pokemon!
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            poke = filteredPokemon[indexPath.row]
+        } else {
+            poke = pokemon[indexPath.row]
+        }
+        
+
+        cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
   
-        cellAttributes.pokemonNameLabel.text = pokemon[indexPath.row].uppercased()
-        
-        
-        
-        
-//        cellAttributes.pokemonImageLabel.image = UIImage(named: )
+        cellAttributes.pokemonNameLabel.text = poke.pokemonName.capitalized
+        cellAttributes.pokemonImageView.image = UIImage(named: "\(poke.pokemonNumber)")
         
         
         return cellAttributes
@@ -131,25 +138,24 @@ extension PopoverViewController: UISearchBarDelegate, UISearchResultsUpdating {
         searchActive = false
     }
     
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(searchBar.text!)
+    }
+    
+    
     func filterContentForSearchText(_ searchText: String, scope: String = "Pokemon") {
         searchActive = true
         
+        filteredPokemon = pokemon.filter({( pokemon : Pokemon) -> Bool in
+        return pokemon.pokemonName.lowercased().contains(searchText.lowercased())
+        })
+        collectionView.reloadData()
         
-//        
-//        //        let filteredFlatPokemon = thePokemon.flatMap { $0 }
-//        //
-//                filteredPokemon = pokemon.filter ({(pokemon) -> Bool in
-//                    let matchedPokemon = (scope == searchText)
-//                    return matchedPokemon
-//                })
-//                collectionView.reloadData()
     }
     
     
     func updateSearchResults(for searchController: UISearchController) {
-        let searchBar = searchController.searchBar
-        let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
-        filterContentForSearchText(searchController.searchBar.text!, scope: scope)
+        filterContentForSearchText(searchController.searchBar.text!)
     }
 }
 

@@ -177,9 +177,5 @@ class PokeAnnotation: NSObject, MKAnnotation {
         
         
         print("I am SPAR \(pokemonNumber) \(pokemonName)")
-        
-        
-        
     }
-    
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0EF884EF0108EFC7535EBDC3 /* Pods_PokeFinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E3F2F8ABDFC966E4C3D537 /* Pods_PokeFinder.framework */; };
+		1314120D1ECED2A600C93501 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1314120C1ECED2A600C93501 /* Pokemon.swift */; };
 		133A24FD1E885FA200DBD6B7 /* PopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133A24FC1E885FA200DBD6B7 /* PopoverViewController.swift */; };
 		133A25001E886E4300DBD6B7 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133A24FF1E886E4300DBD6B7 /* CustomCollectionViewCell.swift */; };
 		13AC15B71E39D07A0053721B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AC15B61E39D07A0053721B /* AppDelegate.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1314120C1ECED2A600C93501 /* Pokemon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		133A24FC1E885FA200DBD6B7 /* PopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverViewController.swift; sourceTree = SOURCE_ROOT; };
 		133A24FF1E886E4300DBD6B7 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		13AC15B31E39D07A0053721B /* PokeFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokeFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				13E02FFF1E47FDF9006C7CBF /* PokeAnnotation.swift */,
+				1314120C1ECED2A600C93501 /* Pokemon.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				13AC15B91E39D07A0053721B /* ViewController.swift in Sources */,
 				13AC15DE1E39D5EF0053721B /* GFGeoHash.m in Sources */,
 				13AC15B71E39D07A0053721B /* AppDelegate.swift in Sources */,
+				1314120D1ECED2A600C93501 /* Pokemon.swift in Sources */,
 				13AC15DC1E39D5EF0053721B /* GeoFire.m in Sources */,
 				13AC15DF1E39D5EF0053721B /* GFGeoHashQuery.m in Sources */,
 				133A24FD1E885FA200DBD6B7 /* PopoverViewController.swift in Sources */,
