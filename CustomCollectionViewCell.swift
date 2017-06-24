@@ -1,5 +1,5 @@
 //
-//  CustomCollectionViewCell.swift
+//  PokemonCollectionViewCell.swift
 //  PokeFinder
 //
 //  Created by Mark Rabins on 3/26/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomCollectionViewCell: UICollectionViewCell {
+class PokemonCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var pokemonImageView: UIImageView!
     @IBOutlet weak var pokemonNameLabel: UILabel!

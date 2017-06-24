@@ -25,7 +25,7 @@ class PopoverViewController: UIViewController {
     
     //    var geoFire: GeoFire!
     
-    var cellAttributes = CustomCollectionViewCell()
+    var cellAttributes = PokemonCollectionViewCell()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +59,7 @@ class PopoverViewController: UIViewController {
         filteredPokemon = pokemon.filter({( pokemon: Pokemon) -> Bool in
             return pokemon.pokemonName.lowercased().contains(searchText.lowercased())
         })
+        
         collectionView.reloadData()
         print("collectionView.reloadData")
         
@@ -83,7 +84,7 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CustomCollectionViewCell
+        cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! PokemonCollectionViewCell
         
         cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
         
@@ -91,13 +92,13 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         if inSearchMode {
             poke = filteredPokemon[indexPath.row]
-            
+            print("the poke is \(poke.pokemonName)")
         }
         poke = pokemon[indexPath.row]
         
         cellAttributes.pokemonNameLabel.text = poke.pokemonName.capitalized
         cellAttributes.pokemonImageView.image = UIImage(named: "\(poke.pokemonNumber)")
-        
+    
         return cellAttributes
         
     }
