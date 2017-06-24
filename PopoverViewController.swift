@@ -16,10 +16,7 @@ class PopoverViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    
     let searchController = UISearchController(searchResultsController: nil)
-    
-    var isSearchActive = false
     
     var filteredPokemon = [Pokemon]()
     var pokemon = [Pokemon]()
@@ -38,53 +35,33 @@ class PopoverViewController: UIViewController {
         collectionView.dataSource = self
         
         searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = true
-        searchController.searchBar.delegate = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        self.searchBar.delegate = self
         
-//        searchController.isActive = true
-
+        print("the searchBar \(searchController)")
         
-        print("here's the search con \(searchController)")
-        print("the search bar \(searchBar)")
         
         loadPokemonList()
-        
     }
     
-    //    func createSighting(forLocation location: CLLocation, withPokemon pokeId: Int) {
-    //        geoFire.setLocation(location, forKey: "\(pokeId)")
-    //    }
-    
-   
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
     func loadPokemonList() {
         for i in 1..<152 {
-            let poke = Pokemon(number: i)
-            pokemon.append(poke)
+            let pokes = Pokemon(number: i)
+            pokemon.append(pokes)
         }
     }
+    
     func filterContentForSearchText(_ searchText: String) {
-        isSearchActive = true
-        
-        filteredPokemon = pokemon.filter({(pokemon : Pokemon) -> Bool in
-            print("the searchText \(searchText) : \(filteredPokemon)")
+        filteredPokemon = pokemon.filter({( pokemon: Pokemon) -> Bool in
             return pokemon.pokemonName.lowercased().contains(searchText.lowercased())
         })
-        print("data reloaded")
         collectionView.reloadData()
+        
     }
+    
 }
-
 
 extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -96,18 +73,19 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if isSearchActive == true {
+        if searchController.isActive  {
             return filteredPokemon.count
-        } else {
-            return pokemon.count
         }
+        return pokemon.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CustomCollectionViewCell
         
-        let poke: Pokemon!
+        cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
+        
+        let poke: Pokemon
         
         if searchController.isActive && searchController.searchBar.text != "" {
             poke = filteredPokemon[indexPath.row]
@@ -116,41 +94,29 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
         }
         
         
-        cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
-        
         cellAttributes.pokemonNameLabel.text = poke.pokemonName.capitalized
         cellAttributes.pokemonImageView.image = UIImage(named: "\(poke.pokemonNumber)")
         
-        
         return cellAttributes
+        
     }
 }
 
-extension PopoverViewController: UISearchBarDelegate {
-    // Handles the search feature
+extension PopoverViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        isSearchActive = true
-    }
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        isSearchActive = false
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        isSearchActive = false
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        isSearchActive = false
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+    func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchBar.text!)
     }
-}
-
-extension PopoverViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        print("the Search is \(searchBar.text!)")
+        
+        print("here's the filteredPokemon \(filteredPokemon) ---- \(filteredPokemon.count)")
+        
+        
+        
+        filterContentForSearchText(searchBar.text!)
     }
 }
