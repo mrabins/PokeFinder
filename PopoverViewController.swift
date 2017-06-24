@@ -20,6 +20,7 @@ class PopoverViewController: UIViewController {
     
     var filteredPokemon = [Pokemon]()
     var pokemon = [Pokemon]()
+    var inSearchMode = false
     
     
     //    var geoFire: GeoFire!
@@ -54,10 +55,12 @@ class PopoverViewController: UIViewController {
     }
     
     func filterContentForSearchText(_ searchText: String) {
+        inSearchMode = true
         filteredPokemon = pokemon.filter({( pokemon: Pokemon) -> Bool in
             return pokemon.pokemonName.lowercased().contains(searchText.lowercased())
         })
         collectionView.reloadData()
+        print("collectionView.reloadData")
         
     }
     
@@ -72,8 +75,7 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if searchController.isActive  {
+        if inSearchMode {
             return filteredPokemon.count
         }
         return pokemon.count
@@ -85,14 +87,13 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
         
-        let poke: Pokemon
+        var poke: Pokemon
         
-        if searchController.isActive && searchController.searchBar.text != "" {
+        if inSearchMode {
             poke = filteredPokemon[indexPath.row]
-        } else {
-            poke = pokemon[indexPath.row]
+            
         }
-        
+        poke = pokemon[indexPath.row]
         
         cellAttributes.pokemonNameLabel.text = poke.pokemonName.capitalized
         cellAttributes.pokemonImageView.image = UIImage(named: "\(poke.pokemonNumber)")
@@ -103,6 +104,14 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
 }
 
 extension PopoverViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBar.showsCancelButton = false
+        searchBar.endEditing(true)
+        inSearchMode = false
+        collectionView.reloadData()
+    }
+    
     
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchBar.text!)
@@ -110,13 +119,9 @@ extension PopoverViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        print("the Search is \(searchBar.text!)")
-        
-        print("here's the filteredPokemon \(filteredPokemon) ---- \(filteredPokemon.count)")
-        
-        
-        
+        inSearchMode = true
+        self.searchBar.showsCancelButton = true
         filterContentForSearchText(searchBar.text!)
+        
     }
 }
