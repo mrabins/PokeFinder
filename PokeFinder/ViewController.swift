@@ -19,8 +19,6 @@ class ViewController: UIViewController {
     var geoFire: GeoFire!
     var geoFireRef: FIRDatabaseReference!
     var pokeAnno: [PokeAnnotation] = []
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,27 +57,18 @@ class ViewController: UIViewController {
     }
     
     @IBAction func spotRandomPokemon(_ sender: UIButton) {
-//        let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
-//        
-//        
-//        
-//        
-//        let rand = arc4random_uniform(150) + 1
-//        createSighting(forLocation: location, withPokemon: Int(rand))
-        
         let popoverContent = (self.storyboard?.instantiateViewController(withIdentifier: "Popover"))! as UIViewController
+        
         let navigation = UINavigationController(rootViewController: popoverContent)
         navigation.modalPresentationStyle = UIModalPresentationStyle.popover
         
-        
         self.present(navigation, animated: true, completion: nil)
-       
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         if let anno = view.annotation as? PokeAnnotation {
-                        
+            
             var place: MKPlacemark!
             if #available(iOS 10.0, *) {
                 place = MKPlacemark(coordinate: anno.coordinate)
@@ -91,7 +80,7 @@ class ViewController: UIViewController {
             let regionDistance: CLLocationDistance = 1000
             let regionSpan = MKCoordinateRegionMakeWithDistance(anno.coordinate, regionDistance, regionDistance)
             let options = [MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center), MKLaunchOptionsMapSpanKey: NSValue (mkCoordinateSpan: regionSpan.span), MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving] as [String : Any]
-            MKMapItem.openMaps(with: [destination], launchOptions: options)            
+            MKMapItem.openMaps(with: [destination], launchOptions: options)
         }
         
     }
@@ -130,7 +119,7 @@ extension ViewController: MKMapViewDelegate {
             annotationView = av
         }
         if let annotationView = annotationView, let anno = annotation as? PokeAnnotation {
-         
+            
             annotationView.canShowCallout = true
             annotationView.image = UIImage(named: "\(anno.pokemonNumber)")
             let button = UIButton()

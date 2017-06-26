@@ -9,9 +9,9 @@
 import UIKit
 import FirebaseDatabase
 import MapKit
+import CoreLocation
 
-class PopoverViewController: UIViewController {
-    
+class PopoverViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -21,11 +21,9 @@ class PopoverViewController: UIViewController {
     var filteredPokemon = [Pokemon]()
     var pokemon = [Pokemon]()
     var inSearchMode = false
-    
-    
-    //    var geoFire: GeoFire!
-    
-    //    var cellAttributes = PokemonCollectionViewCell()
+    var theViewController = ViewController()
+    let locationManager = CLLocationManager()
+    var locationValue = CLLocationCoordinate2D()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,10 +38,19 @@ class PopoverViewController: UIViewController {
         definesPresentationContext = true
         self.searchBar.delegate = self
         
-        print("the searchBar \(searchController)")
-        
-        
         loadPokemonList()
+        
+        // Requests Authorization from the User
+        self.locationManager.requestAlwaysAuthorization()
+        
+        // For use in the foreground
+        self.locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
     }
     
     
@@ -54,26 +61,37 @@ class PopoverViewController: UIViewController {
         }
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        locationValue = manager.location!.coordinate
+    }
+    
     func filterContentForSearchText(_ searchText: String) {
         inSearchMode = true
         filteredPokemon = pokemon.filter({( pokemon: Pokemon) -> Bool in
             return pokemon.pokemonName.lowercased().contains(searchText.lowercased())
         })
-        
         collectionView.reloadData()
-        print("collectionView.reloadData")
-        
     }
-    
 }
 
 extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        // What to do when selected
+        var pokeyToShow: Pokemon
+        
+        let latitude = locationValue.latitude
+        let longitude = locationValue.longitude
+        let cLLocationFromLatAndLong = CLLocation(latitude: latitude, longitude: longitude)
+        
+        if filteredPokemon.count >= 1 {
+            pokeyToShow = filteredPokemon[indexPath.row]
+        }
+            pokeyToShow = pokemon[indexPath.row]
+
+        theViewController.createSighting(forLocation: cLLocationFromLatAndLong, withPokemon: Int(pokeyToShow.pokemonNumber))
+        
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if inSearchMode {
@@ -82,9 +100,11 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
         return pokemon.count
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cellAttributes = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? PokemonCollectionViewCell {
+            
+            cellAttributes.backgroundColor = UIColor(red: 221/255, green: 233/255, blue: 241/255, alpha: 0.25)
+            
             let poke: Pokemon!
             
             if inSearchMode {
@@ -111,16 +131,13 @@ extension PopoverViewController: UISearchResultsUpdating, UISearchBarDelegate {
         collectionView.reloadData()
     }
     
-    
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchBar.text!)
     }
-    
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         inSearchMode = true
         self.searchBar.showsCancelButton = true
         filterContentForSearchText(searchBar.text!)
-        
     }
 }
