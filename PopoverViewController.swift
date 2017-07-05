@@ -88,8 +88,12 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
             pokeyToShow = filteredPokemon[indexPath.row]
         }
             pokeyToShow = pokemon[indexPath.row]
+        
+        _ = dismiss(animated: false, completion: nil)
 
-        theViewController.createSighting(forLocation: cLLocationFromLatAndLong, withPokemon: Int(pokeyToShow.pokemonNumber))
+//        theViewController.createSighting(forLocation: cLLocationFromLatAndLong, withPokemon: pokeyToShow.pokemonNumber)
+//        
+  
         
     }
     
