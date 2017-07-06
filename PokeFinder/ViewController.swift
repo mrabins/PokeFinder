@@ -22,11 +22,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         mapView.delegate = self
         mapView.userTrackingMode = MKUserTrackingMode.follow
-        
         geoFireRef = Database.database().reference()
         geoFire = GeoFire(firebaseRef: geoFireRef)
     }

@@ -38,5 +38,7 @@
 	<string>Location is required to show nearby Pokemon. If you don&apos;t want to catch them all please keep your dang location to yourself.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Location is required to ensure we are dropping Pokemon&apos;s where you expect.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Test</string>
 </dict>
 </plist>

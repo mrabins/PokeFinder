@@ -18,10 +18,13 @@ class PopoverViewController: UIViewController, CLLocationManagerDelegate {
     
     let searchController = UISearchController(searchResultsController: nil)
     
+    var theVC = ViewController()
+    
     var filteredPokemon = [Pokemon]()
     var pokemon = [Pokemon]()
     var inSearchMode = false
     var theViewController = ViewController()
+    var geoFire: GeoFire!
     let locationManager = CLLocationManager()
     var locationValue = CLLocationCoordinate2D()
     
@@ -87,13 +90,15 @@ extension PopoverViewController: UICollectionViewDelegate, UICollectionViewDataS
         if filteredPokemon.count >= 1 {
             pokeyToShow = filteredPokemon[indexPath.row]
         }
-            pokeyToShow = pokemon[indexPath.row]
+        pokeyToShow = pokemon[indexPath.row]
         
-        _ = dismiss(animated: false, completion: nil)
-
-//        theViewController.createSighting(forLocation: cLLocationFromLatAndLong, withPokemon: pokeyToShow.pokemonNumber)
-//        
-  
+        self.dismiss(animated: true) {
+            self.theVC.createSighting(forLocation: cLLocationFromLatAndLong, withPokemon: Int(pokeyToShow.pokemonNumber))
+            
+//
+//            self.theVC.createSighting(forLocation: cLLocationFromLatAndLong, withPokemon: pokeyToShow.pokemonNumber)
+        }
+        
         
     }
     
