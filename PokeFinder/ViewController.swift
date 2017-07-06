@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     let locationManager = CLLocationManager()
     var mapHasCenteredOnce = false
     var geoFire: GeoFire!
-    var geoFireRef: FIRDatabaseReference!
+    var geoFireRef: DatabaseReference!
     var pokeAnno: [PokeAnnotation] = []
     
     override func viewDidLoad() {
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         mapView.delegate = self
         mapView.userTrackingMode = MKUserTrackingMode.follow
         
-        geoFireRef = FIRDatabase.database().reference()
+        geoFireRef = Database.database().reference()
         geoFire = GeoFire(firebaseRef: geoFireRef)
     }
     
