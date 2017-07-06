@@ -4,13 +4,19 @@ Request for Location Services
 
 ![Alt text](https://github.com/mrabins/PokeFinder/blob/images/Simulator%20Screen%20Shot%20Jul%205%2C%202017%2C%208.48.46%20PM.png)
 
+
+
 Map Showing User Pin in San Francisco
 
 ![Alt text](https://github.com/mrabins/PokeFinder/blob/images/Simulator%20Screen%20Shot%20Jul%205%2C%202017%2C%2010.58.58%20PM.png)
 
+
+
 Collection View of Pokemon
 
 ![Alt text](https://github.com/mrabins/PokeFinder/blob/images/Simulator%20Screen%20Shot%20Jul%205%2C%202017%2C%2010.59.03%20PM.png)
+
+
 
 Filtering Collection View of Pokemon
 
